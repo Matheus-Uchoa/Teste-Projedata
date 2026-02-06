@@ -2,8 +2,14 @@
 FROM maven:3.9.6-eclipse-temurin-17-alpine AS build
 WORKDIR /app
 
+# Debug: mostra o conteúdo do diretório atual antes de copiar
+RUN pwd && ls -la || true
+
 # Copia tudo de uma vez
 COPY . .
+
+# Debug: mostra o que foi copiado
+RUN echo "=== Arquivos copiados ===" && ls -la && echo "=== Verificando pom.xml ===" && ls -la pom.xml || echo "POM.XML NÃO ENCONTRADO!"
 
 # Build do projeto
 RUN mvn clean package -DskipTests -B

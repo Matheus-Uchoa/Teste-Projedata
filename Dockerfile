@@ -17,7 +17,7 @@ FROM eclipse-temurin:17-jre-alpine
 WORKDIR /app
 
 # Copia o jar gerado
-COPY --from=build /app/target/quarkus-app/ ./
+COPY --from=build /app/target/quarkus-app/quarkus-run.jar
 
 # Porta padrão
 EXPOSE 8080

@@ -6,9 +6,6 @@ WORKDIR /app
 COPY teste-api/pom.xml ./pom.xml
 COPY teste-api/src ./src
 
-# Debug: Verifica o que foi copiado
-RUN echo "=== Verificando arquivos ===" && ls -la && echo "=== POM.XML ===" && cat pom.xml | head -10
-
 # Build do projeto
 RUN mvn clean package -DskipTests -B
 
@@ -16,15 +13,14 @@ RUN mvn clean package -DskipTests -B
 FROM eclipse-temurin:17-jre-alpine
 WORKDIR /app
 
-# Copia o jar gerado
-COPY --from=build /app/target/quarkus-app/quarkus-run.jar app.jar
+# Copia o diretório quarkus-app completo
+COPY --from=build /app/target/quarkus-app /app
 
 # Porta padrão
 EXPOSE 8080
 
-# Variáveis de ambiente podem ser sobrescritas pelo Render
+# Variáveis de ambiente
 ENV QUARKUS_HTTP_HOST=0.0.0.0
-ENV QUARKUS_HTTP_PORT=8080
 
-# Start da aplicação com suporte à variável PORT do Render
-CMD java -Dquarkus.http.port=${PORT:-8080} -jar app.jar
+# Start da aplicação Quarkus
+CMD java -Dquarkus.http.host=0.0.0.0 -Dquarkus.http.port=${PORT:-8080} -jar quarkus-run.jar

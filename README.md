@@ -1,55 +1,59 @@
-# TesteProjedata - Sistema de Controle de Estoque
+# TesteProjedata - Sistema de Gestão de Inventário
 
-Sistema para controle de estoque de produtos e matérias-primas em indústrias.
+Sistema completo para gestão de inventário industrial com controle de produtos, matérias-primas, associações entre produtos e materiais, e sugestões de produção baseadas em disponibilidade de estoque.
 
-## Estrutura do Projeto
+## 📁 Estrutura do Projeto
 
 ```
 TesteProjedata/
-├── teste-api/          # Back-end (API REST com Quarkus)
-└── teste-app/          # Front-end (Vue.js 3 + TypeScript)
+├── teste-api/          # Back-end (Quarkus 3.31.2 + PostgreSQL)
+│   ├── src/main/java/com/example/
+│   │   ├── dto/              # Data Transfer Objects
+│   │   ├── entity/           # Entidades JPA
+│   │   ├── exception/        # Exceções customizadas
+│   │   ├── filter/           # Filtros de paginação e busca
+│   │   ├── mapper/           # Mapeadores DTO ↔ Entity
+│   │   ├── repository/       # Repositórios Panache
+│   │   ├── resource/         # Endpoints REST (JAX-RS)
+│   │   └── service/          # Regras de negócio
+│   └── src/main/resources/db/migration/  # Flyway migrations
+│
+└── teste-app/          # Front-end (Vue 3 + TypeScript)
+    ├── src/
+    │   ├── components/
+    │   │   ├── common/               # Componentes reutilizáveis
+    │   │   ├── product/              # Componentes de produtos
+    │   │   ├── raw-material/         # Componentes de matérias-primas
+    │   │   └── product-material/     # Componentes de associações
+    │   ├── services/                 # Serviços API (Axios)
+    │   ├── stores/                   # Pinia stores
+    │   ├── views/                    # Views/Páginas
+    │   └── router/                   # Vue Router
+    └── package.json
 ```
 
 ## 🔧 Tecnologias
 
-### Back-end (teste-api)
-- **Quarkus** 3.31.2
-- **Java** 17
-- **PostgreSQL** 13
-- **Flyway** (migrations)
-- **Hibernate ORM Panache**
+**Backend:** Quarkus 3.31.2, Java 17, PostgreSQL 13, Flyway, Hibernate ORM Panache, JAX-RS
 
-### Front-end (teste-app)
-- **Vue.js** 3
-- **TypeScript**
-- **Vue Router**
-- **Pinia** (state management)
+**Frontend:** Vue.js 3, TypeScript, Pinia, Vue Router, Axios, Vite
 
-## 🚀 Como executar
+**Testes:** JUnit 5, Mockito, Vitest
 
-### Back-end (API)
+## ✨ Funcionalidades
 
-```bash
-cd teste-api
-./mvnw quarkus:dev
-```
+- ✅ CRUD completo de produtos e matérias-primas
+- ✅ Associação entre produtos e materiais com quantidade necessária
+- ✅ Sugestões de produção baseadas em estoque disponível
+- ✅ Busca, filtros e paginação em todas as entidades
+- ✅ Edição inline nas tabelas
+- ✅ Validação de integridade referencial
+- ✅ Interface responsiva (mobile, tablet, desktop)
+- ✅ Wizard de criação de produtos com vinculação de materiais
 
-A API estará disponível em: `http://localhost:8081`
+## 🚀 Como Executar
 
-Swagger UI: `http://localhost:8081/q/swagger-ui`
-
-### Front-end (App)
-
-```bash
-cd teste-app
-npm run dev
-```
-
-A aplicação estará disponível em: `http://localhost:5173`
-
-## 📦 Banco de Dados
-
-O projeto usa PostgreSQL rodando em Docker:
+### 1. Banco de Dados PostgreSQL
 
 ```bash
 docker run -d --name postgres-inventory \
@@ -60,32 +64,56 @@ docker run -d --name postgres-inventory \
   postgres:13-alpine
 ```
 
-## 📚 Endpoints da API
+### 2. Back-end
 
-### Produtos
-- `GET /api/products` - Lista todos os produtos
-- `GET /api/products/{id}` - Busca produto por ID
-- `POST /api/products` - Cria novo produto
-- `PUT /api/products/{id}` - Atualiza produto
-- `DELETE /api/products/{id}` - Deleta produto
+```bash
+cd teste-api
+./mvnw quarkus:dev
+```
 
-### Matérias-primas
-- `GET /api/raw-materials` - Lista todas as matérias-primas
-- `GET /api/raw-materials/{id}` - Busca matéria-prima por ID
-- `POST /api/raw-materials` - Cria nova matéria-prima
-- `PUT /api/raw-materials/{id}` - Atualiza matéria-prima
-- `DELETE /api/raw-materials/{id}` - Deleta matéria-prima
+**API:** `http://localhost:8081`
+**Swagger UI:** `http://localhost:8081/q/swagger-ui`
 
-### Associações Produto-Matéria Prima
-- `GET /api/products/{productId}/raw-materials` - Lista matérias-primas do produto
-- `POST /api/products/{productId}/raw-materials` - Adiciona matéria-prima ao produto
-- `PUT /api/products/{productId}/raw-materials/{rawMaterialId}` - Atualiza quantidade
-- `DELETE /api/products/{productId}/raw-materials/{rawMaterialId}` - Remove associação
+### 3. Front-end
 
-## 🎯 Funcionalidades
+```bash
+cd teste-app
+npm install
+npm run dev
+```
 
-- ✅ CRUD de Produtos
-- ✅ CRUD de Matérias-primas
-- ✅ Associação de matérias-primas aos produtos
-- 🔄 Consulta de produtos que podem ser produzidos (em desenvolvimento)
-- 🔄 Front-end Vue.js (em desenvolvimento)
+**Aplicação:** `http://localhost:5173`
+
+## 🧪 Testes
+
+**Backend:**
+```bash
+cd teste-api
+./mvnw test
+```
+
+**Frontend:**
+```bash
+cd teste-app
+npm run test
+```
+
+## 📚 Endpoints Principais
+
+| Método | Endpoint | Descrição |
+|--------|----------|-----------|
+| GET | `/api/products` | Lista produtos |
+| GET | `/api/raw-materials` | Lista matérias-primas |
+| GET | `/api/products/{id}/raw-materials` | Lista materiais do produto |
+| GET | `/api/production-suggestions` | Sugestões de produção |
+
+Todos os endpoints suportam paginação (`page`, `size`), busca (`search`) e ordenação (`sortBy`, `sortDirection`).
+
+## 🗄️ Banco de Dados
+
+- **products** - Produtos fabricados
+- **raw_materials** - Matérias-primas em estoque
+- **product_raw_materials** - Associação N:N entre produtos e materiais
+- **production_suggestions** - View materializada com sugestões de produção
+
+As migrations Flyway são executadas automaticamente ao iniciar a aplicação e incluem dados de exemplo (seed data).

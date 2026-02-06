@@ -2,13 +2,11 @@
 FROM maven:3.9.6-eclipse-temurin-17-alpine AS build
 WORKDIR /app
 
-# Copia arquivos Maven para cache de dependências
-COPY pom.xml .
-RUN mvn dependency:go-offline -B
+# Copia tudo de uma vez
+COPY . .
 
-# Copia o código fonte e faz o build
-COPY src/ ./src/
-RUN mvn package -DskipTests -B
+# Build do projeto
+RUN mvn clean package -DskipTests -B
 
 # Etapa de runtime
 FROM eclipse-temurin:17-jre-alpine

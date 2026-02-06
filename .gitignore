@@ -1,0 +1,51 @@
+# Maven (teste-api)
+teste-api/target/
+teste-api/pom.xml.tag
+teste-api/pom.xml.releaseBackup
+teste-api/pom.xml.versionsBackup
+teste-api/release.properties
+teste-api/.flattened-pom.xml
+
+# Node (teste-app)
+teste-app/node_modules/
+teste-app/dist/
+teste-app/.DS_Store
+teste-app/coverage/
+
+# Eclipse
+.project
+.classpath
+.settings/
+bin/
+
+# IntelliJ
+.idea
+*.ipr
+*.iml
+*.iws
+
+# NetBeans
+nb-configuration.xml
+
+# Visual Studio Code
+.vscode
+.factorypath
+
+# OSX
+.DS_Store
+
+# Vim
+*.swp
+*.swo
+
+# patch
+*.orig
+*.rej
+
+# Local environment
+.env
+
+# Plugin directory
+/.quarkus/cli/plugins/
+# TLS Certificates
+.certs/
